@@ -1,0 +1,2 @@
+dotnet publish Flow.Launcher.Plugin.Unity3D -c Release -r win-x64
+Compress-Archive -LiteralPath Flow.Launcher.Plugin.Unity3D/bin/Release/win-x64/publish -DestinationPath Flow.Launcher.Plugin.Unity3D/bin/Unity3D.zip -Force

@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0-windows</TargetFramework>
+    <AssemblyName>Flow.Launcher.Plugin.Unity3D</AssemblyName>
+    <PackageId>Flow.Launcher.Plugin.Unity3D</PackageId>
+    <Authors>falldeaf</Authors>
+    <PackageProjectUrl>https://github.com/falldeaf/Flow.Launcher.Plugin.Unity3D</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/falldeaf/Flow.Launcher.Plugin.Unity3D</RepositoryUrl>
+    <PackageTags>flow-launcher flow-plugin</PackageTags>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DebugSymbols>false</DebugSymbols>
+    <DebugType>None</DebugType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="plugin.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Flow.Launcher.Plugin" Version="2.1.1" />
+  </ItemGroup>
+
+</Project>
