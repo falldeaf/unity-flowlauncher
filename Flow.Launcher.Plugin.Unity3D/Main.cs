@@ -1,15 +1,44 @@
 using System;
 using System.Collections.Generic;
 using Flow.Launcher.Plugin;
+using Flow.Launcher.Plugin.Unity3D;
 using System.Text.Json;
+using fuzzy.match;
+using System.Linq;
 
 namespace Flow.Launcher.Plugin.Unity3D
 {
-	public class Unity3D : IPlugin
+    class StringCompare : IComparer<Result> {
+        public int Compare(Result x, Result y) {
+            if (x == null || y == null) return 0;
+            return x.Title.ToString().ToLower().CompareTo(y.Title.ToString().ToLower());
+        }
+    }
+
+    class FuzzyCompare : IComparer<Result>
+    {
+        private string query = "";
+
+        public FuzzyCompare(string query) {
+            this.query = query;
+        }
+        public int Compare(Result x, Result y) {
+            
+            if (x == null || y == null) return 0;
+            int out1;
+            int out2;
+            FuzzyMatcher.FuzzyMatch(x.Title.ToString().ToLower(), this.query, out out1);
+            FuzzyMatcher.FuzzyMatch(y.Title.ToString().ToLower(), this.query, out out2);
+            return out2.CompareTo(out1);
+        }
+    }
+
+    public class Unity3D : IPlugin
 	{
 		private PluginInitContext _context;
+        private Settings _settings;
 
-		private string test_json_string = @"
+        private string test_json_string = @"
 		[
             {
                 ""Version"":  {
@@ -88,23 +117,28 @@ namespace Flow.Launcher.Plugin.Unity3D
 
 		public void Init(PluginInitContext context) {
 			_context = context;
-		}
+            _settings = context.API.LoadSettingJsonStorage<Settings>();
+        }
 
 		public List<Result> Query(Query query) {
 			var results = new List<Result>();
+            //var project_path = string.IsNullOrEmpty(_settings.project_path) ? "notepad.exe" : _settings.project_path;
 
-            //var result_json = JsonDocument.Parse(test_json_string);
             string project_path = "C:\\project\\git\\";
             string str_cmd = $"Get-UnityProjectInstance -BasePath {project_path} -Recurse | ConvertTo-Json";
-            var result_json = JsonDocument.Parse(RunCmd(str_cmd, true));
+            //var result_json = JsonDocument.Parse(RunCmd(str_cmd, true));
+            var result_json = JsonDocument.Parse(test_json_string);
 
             foreach (var item in result_json.RootElement.EnumerateArray()) {
 
+                string name = item.GetProperty("ProductName").ToString();
                 string upath = item.GetProperty("Path").ToString();
 
+                int out1;
+                FuzzyMatcher.FuzzyMatch(name, query.Search, out out1);
                 Result result = new Result
                 {
-                    Title = item.GetProperty("ProductName").ToString(),
+                    Title = name + " : " + out1.ToString(),
                     SubTitle = upath,
                     //IcoPath = "",
                     ContextData = item.GetProperty("Path").ToString(),
@@ -120,12 +154,21 @@ namespace Flow.Launcher.Plugin.Unity3D
 
             }
 
-			return results;
-		}
+            if (string.IsNullOrEmpty(query.Search)) {
+                //StringCompare sc = new();
+                //results.Sort(sc);
+                results = results.OrderBy(o => o.Title).ToList();
+            } else {
+                FuzzyCompare fc = new(query.Search);
+                results.Sort(fc);
+            }
+
+            return results;
+        }
 
         private static string RunCmd(string str_command, bool wait) {
             string str_output = "";
-            System.Diagnostics.Process pProcess = new System.Diagnostics.Process();
+            System.Diagnostics.Process pProcess = new();
             pProcess.StartInfo.FileName = "powershell.exe";
             pProcess.StartInfo.Arguments = str_command;
             pProcess.StartInfo.UseShellExecute = false;
