@@ -1,15 +1,16 @@
-<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
 
   <PropertyGroup>
-    <TargetFramework>net5.0-windows</TargetFramework>
-    <AssemblyName>Flow.Launcher.Plugin.Unity3D</AssemblyName>
-    <PackageId>Flow.Launcher.Plugin.Unity3D</PackageId>
+    <TargetFramework>net5.0-windows10.0.22000.0</TargetFramework>
+    <AssemblyName>Flow.Launcher.Plugin.UnityHelper</AssemblyName>
+    <PackageId>Flow.Launcher.Plugin.UnityHelper</PackageId>
     <Authors>falldeaf</Authors>
     <PackageProjectUrl>https://github.com/falldeaf/Flow.Launcher.Plugin.Unity3D</PackageProjectUrl>
     <RepositoryUrl>https://github.com/falldeaf/Flow.Launcher.Plugin.Unity3D</RepositoryUrl>
     <PackageTags>flow-launcher flow-plugin</PackageTags>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <SupportedOSPlatformVersion>10.0.17763.0</SupportedOSPlatformVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -25,6 +26,13 @@
 
   <ItemGroup>
     <PackageReference Include="Flow.Launcher.Plugin" Version="2.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Include="UnityHelper.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
 
 </Project>

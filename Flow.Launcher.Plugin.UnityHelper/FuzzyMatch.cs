@@ -3,6 +3,7 @@
 //   This software is dual-licensed to the public domain and under the following
 //   license: you are granted a perpetual, irrevocable license to copy, modify,
 //   publish, and distribute this file as you see fit.
+//   https://gist.github.com/CDillinger/2aa02128f840bdca90340ce08ee71bc2
 
 using System;
 using System.Collections.Generic;

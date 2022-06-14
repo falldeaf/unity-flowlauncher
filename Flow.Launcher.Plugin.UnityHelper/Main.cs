@@ -1,13 +1,11 @@
 using System;
 using System.Collections.Generic;
-using Flow.Launcher.Plugin;
-using Flow.Launcher.Plugin.Unity3D;
 using System.Text.Json;
 using fuzzy.match;
 using System.Linq;
+using Control = System.Windows.Controls.Control;
 
-namespace Flow.Launcher.Plugin.Unity3D
-{
+namespace Flow.Launcher.Plugin.UnityHelper {
     class StringCompare : IComparer<Result> {
         public int Compare(Result x, Result y) {
             if (x == null || y == null) return 0;
@@ -15,8 +13,7 @@ namespace Flow.Launcher.Plugin.Unity3D
         }
     }
 
-    class FuzzyCompare : IComparer<Result>
-    {
+    class FuzzyCompare : IComparer<Result> {
         private string query = "";
 
         public FuzzyCompare(string query) {
@@ -33,8 +30,8 @@ namespace Flow.Launcher.Plugin.Unity3D
         }
     }
 
-    public class Unity3D : IPlugin
-	{
+    public class UnityHelper : IPlugin, ISettingProvider//, IPluginI18n, IContextMenu
+    {
 		private PluginInitContext _context;
         private Settings _settings;
 
@@ -164,6 +161,10 @@ namespace Flow.Launcher.Plugin.Unity3D
             }
 
             return results;
+        }
+
+        public Control CreateSettingPanel() {
+            return new UnitySettings(_settings);
         }
 
         private static string RunCmd(string str_command, bool wait) {

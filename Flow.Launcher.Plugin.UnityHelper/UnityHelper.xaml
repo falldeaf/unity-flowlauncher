@@ -1,0 +1,36 @@
+<UserControl
+    x:Class="Flow.Launcher.Plugin.UnityHelper.UnitySettings"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignHeight="300"
+    d:DesignWidth="426.4"
+    Loaded="ViewLoaded"
+    mc:Ignorable="d">
+    <Grid Margin="60,10,0,15" VerticalAlignment="Top">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid.Resources>
+        </Grid.Resources>
+
+        <Label
+            x:Name="project_path"
+            Grid.Row="3"
+            Grid.Column="2"
+            Margin="58,0,0,0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Center" />
+
+        <Button
+            x:Name="ProjectPathClicked"
+            Grid.Row="0"
+            Grid.Column="1"
+            MinWidth="100"
+            HorizontalAlignment="Left"
+            Click="OpenProjectPath"
+            Content="..." Grid.ColumnSpan="2" Grid.RowSpan="3" />
+
+    </Grid>
+</UserControl>
