@@ -10,27 +10,29 @@
     mc:Ignorable="d">
     <Grid Margin="60,10,0,15" VerticalAlignment="Top">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="15.786" />
+            <RowDefinition Height="10.174"/>
         </Grid.RowDefinitions>
         <Grid.Resources>
         </Grid.Resources>
 
-        <Label
-            x:Name="project_path"
-            Grid.Row="3"
-            Grid.Column="2"
-            Margin="58,0,0,0"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Center" />
-
         <Button
             x:Name="ProjectPathClicked"
-            Grid.Row="0"
-            Grid.Column="1"
             MinWidth="100"
+            MinHeight="20"
             HorizontalAlignment="Left"
+            VerticalAlignment="Top"
             Click="OpenProjectPath"
-            Content="..." Grid.ColumnSpan="2" Grid.RowSpan="3" />
+            Content="Unity Project Folder" Grid.RowSpan="2" />
+
+        <Label
+            x:Name="current_path"
+            Content="."
+            HorizontalAlignment="Right"
+            VerticalAlignment="Top"
+            Grid.RowSpan="2"
+            Margin="0,0,10,0"
+            HorizontalContentAlignment="Right" />
 
     </Grid>
 </UserControl>

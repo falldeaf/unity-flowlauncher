@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text.Json;
 using fuzzy.match;
 using System.Linq;
+using System.Threading.Tasks;
 using Control = System.Windows.Controls.Control;
 
 namespace Flow.Launcher.Plugin.UnityHelper {
@@ -30,7 +31,7 @@ namespace Flow.Launcher.Plugin.UnityHelper {
         }
     }
 
-    public class UnityHelper : IPlugin, ISettingProvider//, IPluginI18n, IContextMenu
+    public class UnityHelper : IPlugin, ISettingProvider, IContextMenu //IPluginI18n
     {
 		private PluginInitContext _context;
         private Settings _settings;
@@ -119,9 +120,9 @@ namespace Flow.Launcher.Plugin.UnityHelper {
 
 		public List<Result> Query(Query query) {
 			var results = new List<Result>();
-            //var project_path = string.IsNullOrEmpty(_settings.project_path) ? "notepad.exe" : _settings.project_path;
+            string project_path = string.IsNullOrEmpty(_settings.project_path) ? "c:\\" : _settings.project_path;
 
-            string project_path = "C:\\project\\git\\";
+            //string project_path = "C:\\project\\git\\";
             string str_cmd = $"Get-UnityProjectInstance -BasePath {project_path} -Recurse | ConvertTo-Json";
             //var result_json = JsonDocument.Parse(RunCmd(str_cmd, true));
             var result_json = JsonDocument.Parse(test_json_string);
@@ -136,12 +137,11 @@ namespace Flow.Launcher.Plugin.UnityHelper {
                 Result result = new Result
                 {
                     Title = name + " : " + out1.ToString(),
-                    SubTitle = upath,
+                    SubTitle = upath, // + " : " + project_path,
                     //IcoPath = "",
                     ContextData = item.GetProperty("Path").ToString(),
-                    Action = _ =>
-                    {
-                        RunCmd($"Start-UnityEditor -Project {upath}", false);
+                    Action = _ => {
+                        Task.Run(() => RunCmd($"Start-UnityEditor -Project {upath}", false));
 
                         return true;
                     }
@@ -167,7 +167,41 @@ namespace Flow.Launcher.Plugin.UnityHelper {
             return new UnitySettings(_settings);
         }
 
-        private static string RunCmd(string str_command, bool wait) {
+        public List<Result> LoadContextMenus(Result selected_result) {
+            var resultlist = new List<Result> {
+                new Result {
+                    Title = "Reveal path in explorer",
+                    SubTitle = selected_result.SubTitle,
+                    Action = _ => {
+                        Task.Run(() => RunCmd("Start " + selected_result.SubTitle, false));
+                        return true;
+                    }//,
+                    //IcoPath = "Images/user.png"
+                },
+                new Result {
+                    Title = "Open project in Visual Studio Code (Code .)",
+                    SubTitle = selected_result.SubTitle,
+                    Action = _ => {
+                        Task.Run(() => RunCmd("Code " + selected_result.SubTitle, false));
+                        return true;
+                    }//,
+                    //IcoPath = "Images/admin.png"
+                },
+                new Result {
+                    Title = "Open project in Unity3D",
+                    SubTitle = selected_result.SubTitle,
+                    Action = _ => {
+                        Task.Run(() => RunCmd($"Start-UnityEditor -Project {selected_result.SubTitle}", false));
+                        return true;
+                    }//,
+                    //IcoPath = "Images/admin.png"
+                }
+            };
+
+            return resultlist;
+        }
+
+    private static string RunCmd(string str_command, bool wait) {
             string str_output = "";
             System.Diagnostics.Process pProcess = new();
             pProcess.StartInfo.FileName = "powershell.exe";
