@@ -1,8 +1,11 @@
-Flow.Launcher.Plugin.Unity3D
+Unity3D Project lister and launcher
 ==================
+A plugin for the [Flow launcher](https://github.com/Flow-Launcher/Flow.Launcher) that let's you traverse through and open your Unity projects with the correct editor version. The context menu will also allow you to view the project in VSCode or open the projects Assets folder in explorer.
 
-A plugin for the [Flow launcher](https://github.com/Flow-Launcher/Flow.Launcher).
+Icons from [Unity branding page](https://brandguide.brandfolder.com/unity/downloadbrandassets)  and [Freepik - FlatIcon](https://www.flaticon.com/free-icons/coding).
 
-### Usage
+## Installation
+This plugin relies on the [Unity.powershell Module](https://github.com/microsoft/unitysetup.powershell). Go to the github page for installation instructions, and install that module, first. Then, place the contents of the release folder into %appdata%/FlowLauncher/Plugins folder and restart FlowLauncher.
 
-    un <arguments>
+## Usage
+    un <fuzzy search through your projects>
