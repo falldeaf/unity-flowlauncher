@@ -136,9 +136,9 @@ namespace Flow.Launcher.Plugin.UnityHelper {
                 FuzzyMatcher.FuzzyMatch(name, query.Search, out out1);
                 Result result = new Result
                 {
-                    Title = name + " : " + out1.ToString(),
+                    Title = name,
                     SubTitle = upath, // + " : " + project_path,
-                    //IcoPath = "",
+                    IcoPath = "Images/unitylogo.png",
                     ContextData = item.GetProperty("Path").ToString(),
                     Action = _ => {
                         Task.Run(() => RunCmd($"Start-UnityEditor -Project {upath}", false));
@@ -173,10 +173,10 @@ namespace Flow.Launcher.Plugin.UnityHelper {
                     Title = "Reveal path in explorer",
                     SubTitle = selected_result.SubTitle,
                     Action = _ => {
-                        Task.Run(() => RunCmd("Start " + selected_result.SubTitle, false));
+                        Task.Run(() => RunCmd("Start " + selected_result.SubTitle + "Assets\\", false));
                         return true;
-                    }//,
-                    //IcoPath = "Images/user.png"
+                    },
+                    IcoPath = "Images/folder.png"
                 },
                 new Result {
                     Title = "Open project in Visual Studio Code (Code .)",
@@ -184,8 +184,8 @@ namespace Flow.Launcher.Plugin.UnityHelper {
                     Action = _ => {
                         Task.Run(() => RunCmd("Code " + selected_result.SubTitle, false));
                         return true;
-                    }//,
-                    //IcoPath = "Images/admin.png"
+                    },
+                    IcoPath = "Images/code.png"
                 },
                 new Result {
                     Title = "Open project in Unity3D",
@@ -193,8 +193,8 @@ namespace Flow.Launcher.Plugin.UnityHelper {
                     Action = _ => {
                         Task.Run(() => RunCmd($"Start-UnityEditor -Project {selected_result.SubTitle}", false));
                         return true;
-                    }//,
-                    //IcoPath = "Images/admin.png"
+                    },
+                    IcoPath = "Images/editor.png"
                 }
             };
 
