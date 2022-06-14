@@ -6,6 +6,7 @@ Icons from [Unity branding page](https://brandguide.brandfolder.com/unity/downlo
 
 ## Installation
 This plugin relies on the [Unity.powershell Module](https://github.com/microsoft/unitysetup.powershell). Go to the github page for installation instructions, and install that module, first. Then, place the contents of the release folder into %appdata%/FlowLauncher/Plugins folder and restart FlowLauncher.
+In the plugin settings, click the 'Unity Project Folder' button and navigate to your Unity projects folder and click 'open'.
 
 ## Usage
     un <fuzzy search through your projects>
