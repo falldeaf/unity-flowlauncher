@@ -51,62 +51,62 @@ namespace Flow.Launcher.Plugin.UnityHelper {
                 ""ProductName"":  ""NetworkSim+""
             },
             {
-            ""Version"":  {
-                ""Major"":  2019,
-                                ""Minor"":  3,
-                                ""Revision"":  15,
-                                ""Release"":  ""f"",
-                                ""Build"":  1,
-                                ""Suffix"":  null
-                            },
+                ""Version"":  {
+                    ""Major"":  2019,
+                                    ""Minor"":  3,
+                                    ""Revision"":  15,
+                                    ""Release"":  ""f"",
+                                    ""Build"":  1,
+                                    ""Suffix"":  null
+                                },
                 ""Path"":  ""C:\\project\\git\\New Unity Project\\"",
                 ""ProductName"":  ""New Unity Project""
             },
             {
-            ""Version"":  {
-                ""Major"":  2019,
-                                ""Minor"":  3,
-                                ""Revision"":  15,
-                                ""Release"":  ""f"",
-                                ""Build"":  1,
-                                ""Suffix"":  null
-                            },
+                ""Version"":  {
+                    ""Major"":  2019,
+                                    ""Minor"":  3,
+                                    ""Revision"":  15,
+                                    ""Release"":  ""f"",
+                                    ""Build"":  1,
+                                    ""Suffix"":  null
+                                },
                 ""Path"":  ""C:\\project\\git\\ParticleTest\\"",
-                ""ProductName"":  ""ParticleTest""
+                ""ProductName"":  ""ParticleTEST""
             },
             {
-            ""Version"":  {
-                ""Major"":  2019,
-                                ""Minor"":  3,
-                                ""Revision"":  14,
-                                ""Release"":  ""f"",
-                                ""Build"":  1,
-                                ""Suffix"":  null
-                            },
+                ""Version"":  {
+                    ""Major"":  2019,
+                                    ""Minor"":  3,
+                                    ""Revision"":  14,
+                                    ""Release"":  ""f"",
+                                    ""Build"":  1,
+                                    ""Suffix"":  null
+                                },
                 ""Path"":  ""C:\\project\\git\\sctesim\\"",
                 ""ProductName"":  ""SCTE Training""
             },
             {
-            ""Version"":  {
-                ""Major"":  2019,
-                                ""Minor"":  3,
-                                ""Revision"":  15,
-                                ""Release"":  ""f"",
-                                ""Build"":  1,
-                                ""Suffix"":  null
-                            },
+                ""Version"":  {
+                    ""Major"":  2019,
+                                    ""Minor"":  3,
+                                    ""Revision"":  15,
+                                    ""Release"":  ""f"",
+                                    ""Build"":  1,
+                                    ""Suffix"":  null
+                                },
                 ""Path"":  ""C:\\project\\git\\SCTE_3D_SIMS\\"",
                 ""ProductName"":  ""3D_SIM_SCTE""
             },
             {
-            ""Version"":  {
-                ""Major"":  2019,
-                                ""Minor"":  3,
-                                ""Revision"":  15,
-                                ""Release"":  ""f"",
-                                ""Build"":  1,
-                                ""Suffix"":  null
-                            },
+                ""Version"":  {
+                    ""Major"":  2019,
+                    ""Minor"":  3,
+                    ""Revision"":  15,
+                    ""Release"":  ""f"",
+                    ""Build"":  1,
+                    ""Suffix"":  null
+                },
                 ""Path"":  ""C:\\project\\git\\WiFi Radiation Pattern\\"",
                 ""ProductName"":  ""WiFi Radiation Pattern""
             }
@@ -131,12 +131,14 @@ namespace Flow.Launcher.Plugin.UnityHelper {
 
                 string name = item.GetProperty("ProductName").ToString();
                 string upath = item.GetProperty("Path").ToString();
+                string version = item.GetProperty("Version").GetProperty("Major").ToString() + "." +
+                                    item.GetProperty("Version").GetProperty("Minor").ToString() + "." +
+                                    item.GetProperty("Version").GetProperty("Revision").ToString() + "." +
+                                    item.GetProperty("Version").GetProperty("Release").ToString() + "." +
+                                    item.GetProperty("Version").GetProperty("Build").ToString();
 
-                int out1;
-                FuzzyMatcher.FuzzyMatch(name, query.Search, out out1);
-                Result result = new Result
-                {
-                    Title = name,
+                Result result = new Result {
+                    Title = name + " : " + version,
                     SubTitle = upath, // + " : " + project_path,
                     IcoPath = "Images/unitylogo.png",
                     ContextData = item.GetProperty("Path").ToString(),
@@ -152,13 +154,18 @@ namespace Flow.Launcher.Plugin.UnityHelper {
             }
 
             if (string.IsNullOrEmpty(query.Search)) {
-                //StringCompare sc = new();
-                //results.Sort(sc);
-                results = results.OrderBy(o => o.Title).ToList();
+                results = results.OrderBy(result => result.Title).ToList();
             } else {
-                FuzzyCompare fc = new(query.Search);
-                results.Sort(fc);
+                results = results.OrderByDescending(result => FuzzyMatcher.FuzzyMatch(result.Title.ToString().ToLower(), query.Search, out int out1)).ToList();
             }
+
+            /*
+            List<Result> final_results = new List<Result>();
+            final_results = results.OrderByDescending(result => FuzzyMatcher.FuzzyMatch(result.Title.ToString().ToLower(), query.Search, out int out1)).ToList();
+
+            foreach (Result result in final_results) {
+                result.Title = result.Title + " : ";// + FuzzyMatcher.FuzzyMatch(result.Title.ToString().ToLower(), query.Search, out int out3);
+            }*/
 
             return results;
         }
