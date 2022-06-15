@@ -7,31 +7,7 @@ using System.Threading.Tasks;
 using Control = System.Windows.Controls.Control;
 
 namespace Flow.Launcher.Plugin.UnityHelper {
-    class StringCompare : IComparer<Result> {
-        public int Compare(Result x, Result y) {
-            if (x == null || y == null) return 0;
-            return x.Title.ToString().ToLower().CompareTo(y.Title.ToString().ToLower());
-        }
-    }
-
-    class FuzzyCompare : IComparer<Result> {
-        private string query = "";
-
-        public FuzzyCompare(string query) {
-            this.query = query;
-        }
-        public int Compare(Result x, Result y) {
-            
-            if (x == null || y == null) return 0;
-            int out1;
-            int out2;
-            FuzzyMatcher.FuzzyMatch(x.Title.ToString().ToLower(), this.query, out out1);
-            FuzzyMatcher.FuzzyMatch(y.Title.ToString().ToLower(), this.query, out out2);
-            return out2.CompareTo(out1);
-        }
-    }
-
-    public class UnityHelper : IPlugin, ISettingProvider, IContextMenu //IPluginI18n
+    public class UnityHelper : IPlugin, ISettingProvider, IContextMenu //IPluginI18n 
     {
 		private PluginInitContext _context;
         private Settings _settings;
@@ -139,7 +115,7 @@ namespace Flow.Launcher.Plugin.UnityHelper {
 
                 Result result = new Result {
                     Title = name + " : " + version,
-                    SubTitle = upath, // + " : " + project_path,
+                    SubTitle = upath,
                     IcoPath = "Images/unitylogo.png",
                     ContextData = item.GetProperty("Path").ToString(),
                     Action = _ => {
@@ -158,14 +134,6 @@ namespace Flow.Launcher.Plugin.UnityHelper {
             } else {
                 results = results.OrderByDescending(result => FuzzyMatcher.FuzzyMatch(result.Title.ToString().ToLower(), query.Search, out int out1)).ToList();
             }
-
-            /*
-            List<Result> final_results = new List<Result>();
-            final_results = results.OrderByDescending(result => FuzzyMatcher.FuzzyMatch(result.Title.ToString().ToLower(), query.Search, out int out1)).ToList();
-
-            foreach (Result result in final_results) {
-                result.Title = result.Title + " : ";// + FuzzyMatcher.FuzzyMatch(result.Title.ToString().ToLower(), query.Search, out int out3);
-            }*/
 
             return results;
         }
@@ -208,7 +176,7 @@ namespace Flow.Launcher.Plugin.UnityHelper {
             return resultlist;
         }
 
-    private static string RunCmd(string str_command, bool wait) {
+        private static string RunCmd(string str_command, bool wait) {
             string str_output = "";
             System.Diagnostics.Process pProcess = new();
             pProcess.StartInfo.FileName = "powershell.exe";
