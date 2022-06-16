@@ -12,3 +12,4 @@ In the plugin settings, click the 'Unity Project Folder' button and navigate to 
 
 ## Usage
     un <fuzzy search through your projects>
+Shift+Enter on a project listing will let you open your project in Explorer, VSCode, and GitHub
