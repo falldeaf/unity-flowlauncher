@@ -8,31 +8,73 @@
     d:DesignWidth="426.4"
     Loaded="ViewLoaded"
     mc:Ignorable="d">
-    <Grid Margin="60,10,0,15" VerticalAlignment="Top">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="15.786" />
-            <RowDefinition Height="10.174"/>
+    <Grid Margin="60,10,0,0" VerticalAlignment="Top" Height="110">
+        <!-- <Grid.RowDefinitions>
+            <RowDefinition Height="33" />
         </Grid.RowDefinitions>
         <Grid.Resources>
-        </Grid.Resources>
+        </Grid.Resources> -->
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width = "Auto" MinWidth="122" />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height = "*" />
+            <RowDefinition Height = "*" />
+        </Grid.RowDefinitions>
 
         <Button
             x:Name="ProjectPathClicked"
-            MinWidth="100"
-            MinHeight="20"
+            Grid.Row="0"
+            Grid.Column="0"
+            MinWidth="140"
+            MinHeight="40"
             HorizontalAlignment="Left"
-            VerticalAlignment="Top"
+            VerticalAlignment="Center"
             Click="OpenProjectPath"
-            Content="Unity Project Folder" Grid.RowSpan="2" />
+            Content="Unity Project Folder" Height="40" Width="108" />
 
         <Label
+            Grid.Column="1"
             x:Name="current_path"
             Content="."
-            HorizontalAlignment="Right"
-            VerticalAlignment="Top"
-            Grid.RowSpan="2"
-            Margin="0,0,10,0"
-            HorizontalContentAlignment="Right" />
+            HorizontalAlignment="Left"
+            VerticalAlignment="Center"
+            Margin="10,0,0,0"
+            HorizontalContentAlignment="left" Height="26" Width="233" />
+
+        <Button
+            Grid.Row="1"
+            x:Name="btnReindex"
+            MinWidth="140"
+            MinHeight="40"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Center"
+            Click="StartReIndex "
+            Content="ReIndex Projects" Width="108" Height="40" />
+
+        <StackPanel
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    x:Name="indexingPanel"
+                    HorizontalAlignment="Left"
+                    Orientation="Horizontal"
+                    Margin="10,6,0,6"
+                    Visibility="Hidden"
+                    Width="143">
+            <ProgressBar
+                        x:Name="progressBarIndexing"
+                        Width="80"
+                        Height="20"
+                        IsIndeterminate="True"
+                        Maximum="100"
+                        Minimum="0" />
+            <TextBlock
+                        Height="12"
+                        Margin="0"
+                        Text="Indexing..." />
+        </StackPanel>
 
     </Grid>
 </UserControl>

@@ -9,8 +9,10 @@ using Control = System.Windows.Controls.Control;
 namespace Flow.Launcher.Plugin.UnityHelper {
     public class UnityHelper : IPlugin, ISettingProvider, IContextMenu //IPluginI18n 
     {
-		private PluginInitContext _context;
-        private Settings _settings;
+        internal static PluginInitContext _context;
+        internal static Settings _settings;
+        private static string _current_cache;
+        private bool isNewIndexOfProjectsRequired => _settings.last_index_time.AddDays(7) < DateTime.Today;
 
         private string test_json_string = @"
 		[
@@ -92,16 +94,28 @@ namespace Flow.Launcher.Plugin.UnityHelper {
 		public void Init(PluginInitContext context) {
 			_context = context;
             _settings = context.API.LoadSettingJsonStorage<Settings>();
+            _current_cache = _settings.cached_project_json;
+        }
+
+        private static string getProjectsCmd() {
+            string project_path = string.IsNullOrEmpty(_settings.project_path) ? "c:\\" : _settings.project_path;
+            return $"Get-UnityProjectInstance -BasePath {project_path} -Recurse | ConvertTo-Json";
         }
 
 		public List<Result> Query(Query query) {
 			var results = new List<Result>();
-            string project_path = string.IsNullOrEmpty(_settings.project_path) ? "c:\\" : _settings.project_path;
 
-            //string project_path = "C:\\project\\git\\";
-            string str_cmd = $"Get-UnityProjectInstance -BasePath {project_path} -Recurse | ConvertTo-Json";
-            //var result_json = JsonDocument.Parse(RunCmd(str_cmd, true));
-            var result_json = JsonDocument.Parse(test_json_string);
+            JsonDocument result_json;
+            if (string.IsNullOrEmpty(_current_cache) || isNewIndexOfProjectsRequired) {
+                //var result_string = RunCmd(getProjectsCmd(), true);
+                //result_json = JsonDocument.Parse(result_string);
+                //_settings.cached_project_json = result_string;
+                result_json = JsonDocument.Parse(IndexProjects());
+            } else {
+                result_json = JsonDocument.Parse(_current_cache);
+            }
+
+            //var result_json = JsonDocument.Parse(test_json_string);
 
             foreach (var item in result_json.RootElement.EnumerateArray()) {
 
@@ -163,6 +177,15 @@ namespace Flow.Launcher.Plugin.UnityHelper {
                     IcoPath = "Images/code.png"
                 },
                 new Result {
+                    Title = "Open project in GitHub Desktop App (github .)",
+                    SubTitle = selected_result.SubTitle,
+                    Action = _ => {
+                        Task.Run(() => RunCmd("github " + selected_result.SubTitle, false));
+                        return true;
+                    },
+                    IcoPath = "Images/git.png"
+                },
+                new Result {
                     Title = "Open project in Unity3D",
                     SubTitle = selected_result.SubTitle,
                     Action = _ => {
@@ -192,5 +215,34 @@ namespace Flow.Launcher.Plugin.UnityHelper {
 
             return str_output;
         }
-	}
+
+        public static string IndexProjects() {
+            //var t1 = Task.Run(IndexWin32Programs);
+            //var t2 = Task.Run(IndexUwpPrograms);
+            //await Task.WhenAll(t1, t2).ConfigureAwait(false);
+            //ResetCache();
+            var result_string = RunCmd(getProjectsCmd(), true);
+            _settings.cached_project_json = result_string;
+            _current_cache = result_string;
+            _settings.last_index_time = DateTime.Today;
+
+            return result_string;
+        }
+
+        public static async Task IndexProjectsAsync() {
+            //var t1 = Task.Run(IndexWin32Programs);
+            //var t2 = Task.Run(IndexUwpPrograms);
+            //await Task.WhenAll(t1).ConfigureAwait(false);
+            //ResetCache();
+            await Task.Run(() =>
+            {
+                var result_string = RunCmd(getProjectsCmd(), true);
+                _settings.cached_project_json = result_string;
+                _current_cache = result_string;
+                _settings.last_index_time = DateTime.Today;
+
+            }).ConfigureAwait(true);
+
+        }
+    }
 }

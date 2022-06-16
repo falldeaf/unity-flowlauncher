@@ -29,7 +29,18 @@ namespace Flow.Launcher.Plugin.UnityHelper {
 				folder = folder.Substring(0, folder.LastIndexOf(to_remove));
 				this._settings.project_path = folder;
 				current_path.Content = folder;
+				ReIndexing();
 			}
+		}
+
+		private void StartReIndex(object sender, RoutedEventArgs e) {
+			ReIndexing();
+		}
+
+		private async void ReIndexing() {
+			indexingPanel.Visibility = Visibility.Visible;
+			await UnityHelper.IndexProjectsAsync();
+			indexingPanel.Visibility = Visibility.Hidden;
 		}
 
 		private void ViewLoaded(object sender, RoutedEventArgs re) {
