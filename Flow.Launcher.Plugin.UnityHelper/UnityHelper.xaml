@@ -62,7 +62,7 @@
                     Orientation="Horizontal"
                     Margin="10,6,0,6"
                     Visibility="Hidden"
-                    Width="143">
+                    Width="183">
             <ProgressBar
                         x:Name="progressBarIndexing"
                         Width="80"
@@ -71,8 +71,9 @@
                         Maximum="100"
                         Minimum="0" />
             <TextBlock
-                        Height="12"
-                        Margin="0"
+                        Height="20"
+                        Width="100"
+                        Margin="5"
                         Text="Indexing..." />
         </StackPanel>
 
