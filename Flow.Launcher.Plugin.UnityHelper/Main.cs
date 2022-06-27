@@ -217,11 +217,18 @@ namespace Flow.Launcher.Plugin.UnityHelper {
         }
 
         public static string IndexProjects() {
-            //var t1 = Task.Run(IndexWin32Programs);
-            //var t2 = Task.Run(IndexUwpPrograms);
-            //await Task.WhenAll(t1, t2).ConfigureAwait(false);
-            //ResetCache();
+            //Run powershell script and get results in JSON
             var result_string = RunCmd(getProjectsCmd(), true);
+
+            //If there's only one project, the returned json will be an object and it always needs to be an array
+            // -AsArray would handle it but that's only available in Powershell 6
+            if (result_string.TrimStart().StartsWith("{")) {
+                //This is kind of a cludge... Maybe better to check for object or array on returned object?
+                //I probably also need to try/catch this parse and pass an empty array if the json fails, and maybe log it
+                //in flowlaunchers logfile?
+                result_string = "[" + result_string + "\n]";
+            }
+
             _settings.cached_project_json = result_string;
             _current_cache = result_string;
             _settings.last_index_time = DateTime.Today;
@@ -237,6 +244,11 @@ namespace Flow.Launcher.Plugin.UnityHelper {
             await Task.Run(() =>
             {
                 var result_string = RunCmd(getProjectsCmd(), true);
+
+                if (result_string.TrimStart().StartsWith("{")) {
+                    result_string = "[" + result_string + "\n]";
+                }
+
                 _settings.cached_project_json = result_string;
                 _current_cache = result_string;
                 _settings.last_index_time = DateTime.Today;
