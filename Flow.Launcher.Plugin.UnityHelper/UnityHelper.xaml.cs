@@ -44,6 +44,7 @@ namespace Flow.Launcher.Plugin.UnityHelper {
 		}
 
 		private void ViewLoaded(object sender, RoutedEventArgs re) {
+			indexingPanel.Visibility = Visibility.Hidden;
 		}
 	}
 }

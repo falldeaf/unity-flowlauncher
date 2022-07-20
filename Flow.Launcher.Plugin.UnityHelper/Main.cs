@@ -99,7 +99,7 @@ namespace Flow.Launcher.Plugin.UnityHelper {
 
         private static string getProjectsCmd() {
             string project_path = string.IsNullOrEmpty(_settings.project_path) ? "c:\\" : _settings.project_path;
-            return $"Get-UnityProjectInstance -BasePath {project_path} -Recurse | ConvertTo-Json";
+            return $"$warningPreference = 'SilentlyContinue'; Get-UnityProjectInstance -BasePath {project_path} -Recurse -ErrorAction SilentlyContinue | ConvertTo-Json";
         }
 
 		public List<Result> Query(Query query) {
