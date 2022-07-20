@@ -14,3 +14,7 @@ Icons from [Unity branding page](https://brandguide.brandfolder.com/unity/downlo
 ## Usage
     un <fuzzy search through your projects>
 Shift+Enter on a project listing will let you open your project in Explorer, VSCode, or GitHub
+
+## Troubleshooting
+If a project name is blank for a project listing, it's likely because the asset serialization is set to binary or mixed. In the Unity project, try setting Editor Settings > Asset Serialiazation Mode to 'Force
+Text'.
