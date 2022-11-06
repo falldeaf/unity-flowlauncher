@@ -1,6 +1,6 @@
 Unity3D Project lister and launcher
 ==================
-A plugin for [Flow launcher](https://github.com/Flow-Launcher/Flow.Launcher) that let's you list, search, and open your Unity projects with the correct editor version. The context menu will also allow you to view the project in VSCode, Github Desktop, or open the projects Assets folder in explorer.
+A plugin for [Flow launcher](https://github.com/Flow-Launcher/Flow.Launcher) that lets you list, search, and open your Unity projects with the correct editor version. The context menu will also allow you to view the project in VSCode, Github Desktop, or open the projects Assets folder in explorer.
 
 <img src="flowlauncher_unityhelper_preview.gif" alt="Preview gif of Unity Helper plugin" style="display: block; margin: 0 auto" />
 
